@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adam Čermák</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      font-size: 16px;
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px;
+      background: linear-gradient(135deg, #e0e31c, #f97316);
+      color: white;
+      border-radius: 8px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    header p {
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .quiz-form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .question {
+      margin-bottom: 24px;
+      padding: 16px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .question h3 {
+      margin: 0 0 16px 0;
+      color: #000000;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .answer-label {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      margin: 8px 0;
+      border: 2px solid #e0e31c;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .answer-label:hover {
+      background-color: #e0e31c10;
+      transform: translateX(4px);
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 12px;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e31c;
+      border-radius: 8px;
+      font-family: Inter, sans-serif;
+      font-size: 16px;
+      resize: vertical;
+      transition: border-color 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px #f9731620;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: Inter, sans-serif;
+    }
+
+    .btn-submit {
+      background-color: #e0e31c;
+      color: white;
+    }
+
+    .btn-submit:hover {
+      background-color: #f97316;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-reset {
+      background-color: #ffbb00;
+      color: white;
+    }
+
+    .btn-reset:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-show-answers {
+      background-color: #f97316;
+      color: white;
+    }
+
+    .btn-show-answers:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    #resultsModal {
+      display: flex !important;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+
+      header {
+        padding: 16px;
+      }
+
+      header h1 {
+        font-size: 20px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Adam Čermák</h1>
+      
+    </header>
+
+    <div style="width: 100%; background-color: #e5e7eb; border-radius: 8px; height: 8px; overflow: hidden; margin-bottom: 20px;">
+        <div id="progressBar" style="height: 100%; background: linear-gradient(90deg, #e0e31c, #f97316); width: 0%; transition: width 0.3s ease;"></div>
+      </div>
+
+    <form id="quizForm" class="quiz-form">
+      
+        <div class="question" style="margin-bottom: 24px; padding: 16px; background-color: #f8f9fa; border-radius: 8px">
+          <h3 style="margin: 0 0 16px 0; color: #000000; font-size: 18px; font-weight: 600;">
+            1. Z čeho vyrábím šperky?
+          </h3>
+          <div style="margin: 12px 0;">
+          <label class="answer-label" style="display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid #e0e31c; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+            <input type="radio" name="q-0" value="0" style="margin-right: 12px; cursor: pointer;" />
+            <span>UV Pryskyřice</span>
+          </label>
+        
+          <label class="answer-label" style="display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid #e0e31c; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+            <input type="radio" name="q-0" value="1" style="margin-right: 12px; cursor: pointer;" />
+            <span>Pryskyřice</span>
+          </label>
+        
+          <label class="answer-label" style="display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid #e0e31c; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+            <input type="radio" name="q-0" value="2" style="margin-right: 12px; cursor: pointer;" />
+            <span>Kov</span>
+          </label>
+        </div>
+          <div style="margin-top: 12px; padding: 12px; background-color: #ffbb0020; color: #000000; border-radius: 8px; font-size: 14px; display: none;" class="explanation-q-0">
+              <strong>Vysvětlení:</strong> UV pryskyřice je správně
+            </div>
+          
+        </div>
+      
+        <div class="question" style="margin-bottom: 24px; padding: 16px; background-color: #f8f9fa; border-radius: 8px">
+          <h3 style="margin: 0 0 16px 0; color: #000000; font-size: 18px; font-weight: 600;">
+            2. Mám doma 2 kočky
+          </h3>
+          <div style="margin: 12px 0;">
+          <label class="answer-label" style="display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid #e0e31c; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+            <input type="radio" name="q-1" value="0" style="margin-right: 12px; cursor: pointer;" />
+            <span>Ano</span>
+          </label>
+        
+          <label class="answer-label" style="display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid #e0e31c; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+            <input type="radio" name="q-1" value="1" style="margin-right: 12px; cursor: pointer;" />
+            <span>Ne</span>
+          </label>
+        </div>
+          <div style="margin-top: 12px; padding: 12px; background-color: #ffbb0020; color: #000000; border-radius: 8px; font-size: 14px; display: none;" class="explanation-q-1">
+              <strong>Vysvětlení:</strong> Mám 3 kočky - Atoma, Cyrila a Daenerys
+            </div>
+          
+        </div>
+      
+        <div class="question" style="margin-bottom: 24px; padding: 16px; background-color: #f8f9fa; border-radius: 8px">
+          <h3 style="margin: 0 0 16px 0; color: #000000; font-size: 18px; font-weight: 600;">
+            3. Můj web se jmenuje...
+          </h3>
+          <div style="margin: 12px 0;">
+          <label class="answer-label" style="display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid #e0e31c; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+            <input type="radio" name="q-2" value="0" style="margin-right: 12px; cursor: pointer;" />
+            <span>Adam Softwares Cat</span>
+          </label>
+        
+          <label class="answer-label" style="display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid #e0e31c; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+            <input type="radio" name="q-2" value="1" style="margin-right: 12px; cursor: pointer;" />
+            <span>Adam Softwares Dog</span>
+          </label>
+        
+          <label class="answer-label" style="display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 2px solid #e0e31c; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+            <input type="radio" name="q-2" value="2" style="margin-right: 12px; cursor: pointer;" />
+            <span>Coder</span>
+          </label>
+        </div>
+          <div style="margin-top: 12px; padding: 12px; background-color: #ffbb0020; color: #000000; border-radius: 8px; font-size: 14px; display: none;" class="explanation-q-2">
+              <strong>Vysvětlení:</strong> Adam Softwares Cat je správně
+            </div>
+          
+        </div>
+      
+
+      <div class="button-group">
+        <button type="submit" class="btn-submit">Odeslat odpovědi</button>
+        <button type="reset" class="btn-reset">Vymazat</button>
+        
+      </div>
+    </form>
+
+    <div id="results" style="display: none; text-align: center; padding: 32px; background: linear-gradient(135deg, #ffbb0020, #f9731620); border-radius: 8px; margin-top: 32px;">
+      <h2 style="font-size: 22px; margin-bottom: 16px; color: #e0e31c;">Výsledky</h2>
+      <p style="font-size: 18px; margin: 8px 0;">Vaše skóre:</p>
+      <div style="font-size: 24px; font-weight: 700; color: #f97316; margin: 16px 0;" id="scorePercentage">0%</div>
+      <p style="font-size: 16px; margin: 8px 0;" id="scoreText">0 z 0 správně</p>
+      
+    </div>
+  </div>
+
+  <script>
+    const questions = [{"id":"KFuRYwxIealX32rXy_c_B","text":"Z čeho vyrábím šperky?","type":"multiple-choice","answers":[{"id":"CANqJ7_ZAA1vAn9kgCKJH","text":"UV Pryskyřice","isCorrect":true},{"id":"kifIGghv3uIsRsHiBrQKs","text":"Pryskyřice","isCorrect":false},{"id":"E8gDtL7w8i7QoDzY43_eJ","text":"Kov","isCorrect":false}],"explanation":"UV pryskyřice je správně","points":1},{"id":"cjsmRrZWqd7XviTZOiKkC","text":"Mám doma 2 kočky","type":"true-false","answers":[{"id":"_xE1nXy4fG9_NC4bWQkgP","text":"Ano","isCorrect":false},{"id":"3Z6HmTzuV-fZP4hXuWpF8","text":"Ne","isCorrect":true}],"explanation":"Mám 3 kočky - Atoma, Cyrila a Daenerys","points":1},{"id":"l7-WqIdxSrPTQ7pobC5VA","text":"Můj web se jmenuje...","type":"multiple-choice","answers":[{"id":"_4XcgxJX6xxaXpClMNmNE","text":"Adam Softwares Cat","isCorrect":true},{"id":"CHMcCza0Qu1UQthTdLFiJ","text":"Adam Softwares Dog","isCorrect":false},{"id":"inO7TkMg4QcpiVI4-wt77","text":"Coder","isCorrect":false}],"explanation":"Adam Softwares Cat je správně","points":1}];
+    const settings = {"title":"Adam Čermák","description":"","shuffleQuestions":false,"shuffleAnswers":true,"showScore":true,"showCorrectAnswers":false,"allowRetake":false,"buttonShape":"rounded","answersLayout":"vertical","showResultsImmediately":false,"resultsPosition":"end","showProgressBar":true,"requireAllAnswers":true};
+    const showResultsImmediately = false;
+    const resultsPosition = 'end';
+
+    function toggleAnswers() {
+      const explanations = document.querySelectorAll('[class^="explanation-"]');
+      explanations.forEach(exp => {
+        exp.style.display = exp.style.display === 'none' ? 'block' : 'none';
+      });
+    }
+
+    function updateProgressBar() {
+      const form = document.getElementById('quizForm');
+      const formData = new FormData(form);
+      let answeredCount = 0;
+      
+      for (let i = 0; i < questions.length; i++) {
+        if (formData.get('q-' + i) !== null && formData.get('q-' + i) !== '') {
+          answeredCount++;
+        }
+      }
+      
+      const percentage = (answeredCount / questions.length) * 100;
+      const progressBar = document.getElementById('progressBar');
+      if (progressBar) {
+        progressBar.style.width = percentage + '%';
+      }
+    }
+
+    function calculateScore() {
+      const form = document.getElementById('quizForm');
+      const formData = new FormData(form);
+      let correctCount = 0;
+      let totalCount = 0;
+
+      
+        const q0Answer = formData.get('q-0');
+        if (q0Answer !== null) {
+          totalCount++;
+          const correctAnswerIndex = 0;
+          if (parseInt(q0Answer) === correctAnswerIndex) {
+            correctCount++;
+            
+          } else {
+            
+          }
+        }
+      
+        const q1Answer = formData.get('q-1');
+        if (q1Answer !== null) {
+          totalCount++;
+          const correctAnswerIndex = 1;
+          if (parseInt(q1Answer) === correctAnswerIndex) {
+            correctCount++;
+            
+          } else {
+            
+          }
+        }
+      
+        const q2Answer = formData.get('q-2');
+        if (q2Answer !== null) {
+          totalCount++;
+          const correctAnswerIndex = 0;
+          if (parseInt(q2Answer) === correctAnswerIndex) {
+            correctCount++;
+            
+          } else {
+            
+          }
+        }
+      
+
+      return { correctCount, totalCount };
+    }
+
+    document.getElementById('quizForm').addEventListener('change', function() {
+      if (settings.showProgressBar) {
+        updateProgressBar();
+      }
+      if (showResultsImmediately && settings.showScore) {
+        const { correctCount, totalCount } = calculateScore();
+        if (totalCount > 0) {
+          const percentage = Math.round((correctCount / totalCount) * 100);
+          const scorePercentage = document.getElementById('scorePercentage');
+          const scoreText = document.getElementById('scoreText');
+          if (scorePercentage) scorePercentage.textContent = percentage + '%';
+          if (scoreText) scoreText.textContent = correctCount + ' z ' + totalCount + ' správně';
+          
+          if (resultsPosition === 'inline') {
+            const results = document.getElementById('results');
+            if (results) results.style.display = 'block';
+          }
+        }
+      }
+    });
+
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      
+      const form = document.getElementById('quizForm');
+      const formData = new FormData(form);
+      let allAnswered = true;
+      
+      for (let i = 0; i < questions.length; i++) {
+        if (formData.get('q-' + i) === null || formData.get('q-' + i) === '') {
+          allAnswered = false;
+          break;
+        }
+      }
+      
+      if (!allAnswered) {
+        alert('Prosím, odpovězte na všechny otázky');
+        return;
+      }
+      
+
+      
+      const { correctCount, totalCount } = calculateScore();
+      const percentage = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+      
+      document.getElementById('scorePercentage').textContent = percentage + '%';
+      document.getElementById('scoreText').textContent = correctCount + ' z ' + totalCount + ' správně';
+      
+      if (resultsPosition === 'end') {
+        document.getElementById('results').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (resultsPosition === 'modal') {
+        document.getElementById('resultsModal').style.display = 'flex';
+      } else if (resultsPosition === 'inline') {
+        document.getElementById('results').style.display = 'block';
+      }
+      
+    });
+  </script>
+</body>
+</html>
